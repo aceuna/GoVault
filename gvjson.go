@@ -143,3 +143,24 @@ func dbAddPassword(searchSID int) PWData {
 
 	return PWData{}
 }
+
+func dbReplaceData(data PWData) {
+	//get DB
+	pwDataList := dbRead()
+	//get all exept delID
+	var newpwDataList []PWData
+	for _, pwData := range pwDataList {
+
+		if pwData.SID == data.SID {
+
+			newpwDataList = append(newpwDataList, data)
+
+		} else {
+			newpwDataList = append(newpwDataList, pwData)
+		}
+	}
+
+	updatedData, _ := json.MarshalIndent(newpwDataList, "", "  ")
+	os.WriteFile(filePath, updatedData, 0644)
+	fmt.Println("Data updated successfully.")
+}

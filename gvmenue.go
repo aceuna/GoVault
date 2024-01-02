@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
+	"strconv"
 	"strings"
 )
 
@@ -20,7 +21,7 @@ func mainMenu() {
 		fmt.Println("6 - Logout")
 		fmt.Println("7 - EXIT")
 
-		menuCode := getStrInput("Select 1-6")
+		menuCode := getStrInput("Select 1-7")
 		clearTerminal()
 		switch menuCode {
 		case "0":
@@ -65,14 +66,13 @@ func delMenu() {
 
 			if !doesSidExist(foundPWData) {
 				fmt.Println("Ther is no SID", delSID)
-				getStrInput("")
+				getStrInput("\n\nPress enter to continue...")
 				delMenu()
 			}
 
 			//Print found entry
-			fmt.Println("SID, User, URL, Note")
-			formatPWData(foundPWData)
-			fmt.Println("\n")
+			clearTerminal()
+			formatPWDataWithPW(foundPWData, "*********")
 			decision := getDecision("Do you want to delete this password? (y/n)")
 			switch decision {
 			case "y":
@@ -81,13 +81,81 @@ func delMenu() {
 			case "n":
 				delMenu()
 			}
-			getStrInput("")
+			getStrInput("\n\nPress enter to continue...")
 		case "2":
 
 		case "3":
 			mainMenu()
 		}
 	}
+}
+
+func editMenu(data PWData) {
+
+	clearTerminal()
+
+	fmt.Println("Waht do you want to edit?\n")
+	strNum := strconv.Itoa(data.SID)
+
+	fmt.Println("SID:", strNum)
+	fmt.Println("1 - Username:", data.Username)
+	fmt.Println("2 - Password:", "***********")
+	fmt.Println("3 - URL:", data.URL)
+	fmt.Println("4 - Note:", data.Note)
+	fmt.Println("\n")
+
+	menuCode := getIntInput("Select 1-4")
+	var newUser, newPW, newURL, newNote string
+
+	switch menuCode {
+	case 1:
+		newUser = getStrInput("New Username")
+		newPW = data.Password
+		newURL = data.URL
+		newNote = data.Note
+	case 2:
+		newUser = data.Username
+		newURL = data.URL
+		newNote = data.Note
+
+		keyPw, check := checkPwWithHash()
+
+		if check {
+			pw := ""
+			//get right PW
+			for {
+				pw = getStrInput("Password")
+				pw2 := getStrInput("Repeat password")
+				if pw == pw2 {
+					break
+				}
+			}
+
+			key := deriveKey(keyPw)
+			newPW, _ = encrypt([]byte(pw), key)
+
+		} else {
+			fmt.Println("Wrong Password!")
+			getStrInput("\n\nPress enter to continue...")
+			editMenu(data)
+		}
+
+	case 3:
+		newUser = data.Username
+		newPW = data.Password
+		newURL = getStrInput("New URL")
+		newNote = data.Note
+	case 4:
+		newUser = data.Username
+		newPW = data.Password
+		newURL = data.URL
+		newNote = getStrInput("New Note")
+	}
+	replaceData := PWData{
+		SID: data.SID, Username: newUser, Password: newPW, URL: newURL, Note: newNote,
+	}
+	dbReplaceData(replaceData)
+	getStrInput("\n\nPress enter to continue...")
 }
 
 func opt0() {
@@ -100,7 +168,7 @@ func opt0() {
 
 	if !doesSidExist(foundPWData) || searchSID == 0 {
 		fmt.Println("Ther is no SID", searchSID)
-		getStrInput("")
+		getStrInput("\n\nPress enter to continue...")
 		mainMenu()
 	}
 
@@ -123,14 +191,14 @@ func opt0() {
 
 		} else {
 			fmt.Println("Wrong Password!")
-			getStrInput("")
+			getStrInput("\n\nPress enter to continue...")
 			mainMenu()
 		}
 
 	case "n":
-		main()
+		mainMenu()
 	}
-	getStrInput("")
+	getStrInput("\n\nPress enter to continue...")
 }
 
 func opt1() {
@@ -138,7 +206,7 @@ func opt1() {
 	dbData = dbData[1:]
 	printTable(dbData)
 	//dbGetALLData()
-	getStrInput("")
+	getStrInput("\n\nPress enter to continue...")
 }
 
 func opt2() {
@@ -151,7 +219,7 @@ func opt2() {
 		clearTerminal()
 	}
 	printTable(dbGetSearch(search))
-	getStrInput("")
+	getStrInput("\n\nPress enter to continue...")
 }
 
 func opt3() {
@@ -180,6 +248,30 @@ func opt3() {
 }
 
 func opt4() {
+	clearTerminal()
+	//Get SID to del
+	fmt.Println("Enter the SID to edit")
+	delSID := getIntInput("SID")
+	foundPWData := dbGetDataBySID(delSID)
+
+	if !doesSidExist(foundPWData) {
+		fmt.Println("Ther is no SID", delSID)
+		getStrInput("\n\nPress enter to continue...")
+		delMenu()
+	}
+
+	//Print found entry
+	clearTerminal()
+	formatPWDataWithPW(foundPWData, "***************")
+
+	decision := getDecision("Do you want to edit this password? (y/n)")
+	switch decision {
+	case "y":
+		editMenu(foundPWData)
+	case "n":
+		opt4()
+	}
+	getStrInput("\n\nPress enter to continue...")
 
 }
 

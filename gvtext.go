@@ -93,3 +93,7 @@ func printTable(PWData []PWData) {
 		fmt.Printf("%-5v %-30v %-40v %-15s\n", row.SID, row.Username, row.URL, row.Note)
 	}
 }
+
+func pressEnter() {
+	getStrInput("\n\nPress enter to continue...")
+}
