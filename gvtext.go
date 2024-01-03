@@ -87,7 +87,7 @@ func getDecision(question string) string {
 
 func printTable(PWData []PWData) {
 	// Print table header
-	fmt.Printf("%-5s %-30s %-40s %-15s\n", "SID", "Username", "URL", "NOTE")
+	fmt.Printf("%-5s %-30s %-40s %-15s\n", "SID", "Username", "URL", "Note")
 	// Print table rows
 	for _, row := range PWData {
 		fmt.Printf("%-5v %-30v %-40v %-15s\n", row.SID, row.Username, row.URL, row.Note)

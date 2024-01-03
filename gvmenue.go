@@ -11,7 +11,9 @@ func mainMenu() {
 	for {
 
 		clearTerminal()
-		fmt.Println("GoVault main menu\n")
+		fmt.Println("Welcome to your GoVault " + dbGetDataBySID(0).Username + " !\n")
+
+		//fmt.Println("GoVault main menu\n")
 		fmt.Println("0 - Get Password")
 		fmt.Println("1 - Show all Passwords")
 		fmt.Println("2 - Search Password")
@@ -64,7 +66,7 @@ func delMenu() {
 			delSID := getIntInput("SID")
 			foundPWData := dbGetDataBySID(delSID)
 
-			if !doesSidExist(foundPWData) {
+			if !doesSidExist(foundPWData) || delSID == 0 {
 				fmt.Println("Ther is no SID", delSID)
 				getStrInput("\n\nPress enter to continue...")
 				delMenu()
@@ -254,7 +256,7 @@ func opt4() {
 	delSID := getIntInput("SID")
 	foundPWData := dbGetDataBySID(delSID)
 
-	if !doesSidExist(foundPWData) {
+	if !doesSidExist(foundPWData) || delSID == 0 {
 		fmt.Println("Ther is no SID", delSID)
 		getStrInput("\n\nPress enter to continue...")
 		delMenu()
@@ -271,7 +273,6 @@ func opt4() {
 	case "n":
 		opt4()
 	}
-	getStrInput("\n\nPress enter to continue...")
 
 }
 

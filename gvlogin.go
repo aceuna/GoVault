@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"strings"
+	"time"
 )
 
 func login() {
@@ -26,9 +27,10 @@ func login() {
 			{SID: 0, Username: user, Password: createMD5Hash(pw), URL: "", Note: ""},
 		}
 		dbAppend(newUser)
+		login()
 		return
 	}
-	fmt.Println("Welcome to GoVault!")
+	fmt.Println("Welcome to GoVault! by Steven™")
 	for {
 
 		loginUser := getStrInput("User")
@@ -38,10 +40,14 @@ func login() {
 			break
 		} else {
 			fmt.Println("You have entered the wrong user or password!!")
+			pressEnter()
+			login()
+			return
 		}
 
 	}
-
-	fmt.Println("Welcome to your GoVault " + dbGetDataBySID(0).Username + "!")
-
+	clearTerminal()
+	//fmt.Println("Welcome to your GoVault " + dbGetDataBySID(0).Username + "!")
+	loading()
+	time.Sleep(1500 * time.Millisecond)
 }
