@@ -7,30 +7,16 @@ import (
 )
 
 func login() {
-	clearTerminal()
+	clearTerminal(true)
 
 	//create login if none exists
-	if !fileExists(filePath) {
-
-		fmt.Println("Welcome to GoVault. Create your user!")
-		user := getStrInput("User")
-		pw := ""
-		//get right PW
-		for {
-			pw = getStrInput("Password")
-			pw2 := getStrInput("Repeat password")
-			if pw == pw2 {
-				break
-			}
-		}
-		newUser := []PWData{
-			{SID: 0, Username: user, Password: createMD5Hash(pw), URL: "", Note: ""},
-		}
-		dbAppend(newUser)
+	if !fileExists(jsonFilePath) {
+		creatLogin(0)
 		login()
 		return
 	}
-	fmt.Println("Welcome to GoVault! by Steven™")
+	//normal login
+	fmt.Println("Welcome to GoVault!")
 	fmt.Println()
 	for {
 
@@ -41,15 +27,37 @@ func login() {
 			break
 		} else {
 			fmt.Println("You have entered the wrong user or password!!")
-			pressEnter()
+			pressEnterToContinue()
 			login()
 			return
 		}
 
 	}
-	clearTerminal()
-	//fmt.Println("Welcome to your GoVault " + dbGetDataBySID(0).Username + "!")
-	fmt.Println("Welcome to your GoVault " + dbGetDataBySID(0).Username + " !\n")
-	loading()
+	//Login
+	loginMessage()
+}
+
+func creatLogin(SID int) {
+	fmt.Println("Welcome to GoVault. Create your user!")
+	user := getStrInput("User")
+	pw := ""
+	//get right PW
+	for {
+		pw = getStrInput("Password")
+		pw2 := getStrInput("Repeat password")
+		if pw == pw2 {
+			break
+		}
+	}
+	newUser := []PWData{
+		{SID: SID, Username: user, Password: createMD5Hash(pw), URL: "https://govault.ch/", Note: "System PW"},
+	}
+	dbAddData(newUser)
+}
+
+func loginMessage() {
+	clearTerminal(true)
+	printWelcome()
+	printLogin()
 	time.Sleep(1500 * time.Millisecond)
 }

@@ -1,4 +1,4 @@
-module tschudins.com/GoVault
+module govault.ch/GoVault
 
 go 1.21.3
 

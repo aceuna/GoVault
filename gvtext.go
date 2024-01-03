@@ -25,13 +25,9 @@ func getStrInput(inputMessage string) string {
 
 // Get Int Input
 func getIntInput(inputMessage string) (int, string) {
-
 	for {
-
 		reader := bufio.NewReader(os.Stdin)
-
 		fmt.Print(inputMessage + ": ")
-
 		userInput, err := reader.ReadString('\n')
 		if err != nil {
 			log.Fatal()
@@ -41,30 +37,21 @@ func getIntInput(inputMessage string) (int, string) {
 		if userInput == "" {
 			return 0, "NoInput"
 		}
-
 		if isInteger(userInput) {
 			intInput, err := strconv.Atoi(userInput)
 			if err != nil {
 				fmt.Println("Error converting string to int:", err)
 				log.Fatal()
 			}
-
 			return intInput, ""
 		}
-
 	}
 }
 
-func formatPWData(data PWData) {
-
-	strNum := strconv.Itoa(data.SID)
-
-	fmt.Println(strNum, data.Username, data.URL, data.Note)
-
-}
-
-func formatPWDataWithPW(data PWData, pw string) {
-
+func formatPwData(data PWData, pw string) {
+	if pw == "" {
+		pw = "************"
+	}
 	strNum := strconv.Itoa(data.SID)
 
 	fmt.Println("SID:", strNum)
@@ -72,12 +59,10 @@ func formatPWDataWithPW(data PWData, pw string) {
 	fmt.Println("Password:", pw)
 	fmt.Println("URL:", data.URL)
 	fmt.Println("Note:", data.Note)
-	fmt.Println("")
-	fmt.Println("")
-
+	fmt.Println()
 }
 
-func getDecision(question string) string {
+func newDecision(question string) string {
 	var decision string
 	for {
 		decision = getStrInput(question)
@@ -89,7 +74,7 @@ func getDecision(question string) string {
 	return decision
 }
 
-func printTable(PWData []PWData) {
+func formatTable(PWData []PWData) {
 	// Print table header
 	fmt.Printf("%-5s %-30s %-40s %-15s\n", "SID", "USERNAME", "URL", "NOTE")
 	// Print table rows
@@ -98,7 +83,7 @@ func printTable(PWData []PWData) {
 	}
 }
 
-func pressEnter() {
+func pressEnterToContinue() {
 	getStrInput("\n\nPress enter to continue...")
 }
 
@@ -119,7 +104,7 @@ func printLogo() {
 
 }
 
-func loading() {
+func printLogin() {
 
 	fmt.Println(`
                  _                _        
@@ -132,4 +117,8 @@ func loading() {
                            |___/           												
 					   `)
 
+}
+
+func printWelcome() {
+	fmt.Println("Welcome to your GoVault " + dbGetDataBySID(0).Username + " !\n")
 }

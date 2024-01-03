@@ -8,7 +8,7 @@ import (
 	"strconv"
 )
 
-func clearTerminal() {
+func clearTerminal(logo bool) {
 	switch runtime.GOOS {
 	case "linux", "darwin":
 		cmd := exec.Command("clear")
@@ -21,7 +21,9 @@ func clearTerminal() {
 	default:
 		fmt.Println("Unsupported operating system")
 	}
-	printLogo()
+	if logo {
+		printLogo()
+	}
 }
 
 /*
@@ -56,4 +58,14 @@ func checkPwWithHash() (string, bool) {
 		return pw, true
 	}
 	return pw, false
+}
+
+func fileExists(filename string) bool {
+	_, err := os.Stat(filename)
+	return !os.IsNotExist(err)
+}
+
+func exit() {
+	clearTerminal(false)
+	os.Exit(1)
 }
