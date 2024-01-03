@@ -22,8 +22,9 @@ func mainMenu() {
 		fmt.Println("5 - Delete Password")
 		fmt.Println("6 - Logout")
 		fmt.Println("7 - EXIT")
+		fmt.Println("")
 
-		menuCode := getStrInput("Select 1-7")
+		menuCode := getStrInput("Select 0-7")
 		clearTerminal()
 		switch menuCode {
 		case "0":
@@ -51,10 +52,12 @@ func mainMenu() {
 func delMenu() {
 	for {
 		clearTerminal()
-		fmt.Println("GoVault delete menu\n")
+		fmt.Println("GoVault delete menu")
+		fmt.Println("")
 		fmt.Println("1 - Delet by SID")
 		fmt.Println("2 - Delet by Search")
 		fmt.Println("3 - Return")
+		fmt.Println("")
 
 		menuCode := getStrInput("Select 1-3")
 		clearTerminal()
@@ -63,12 +66,12 @@ func delMenu() {
 			clearTerminal()
 			//Get SID to del
 			fmt.Println("Enter the SID to delet")
-			delSID := getIntInput("SID")
+			delSID, _ := getIntInput("SID")
 			foundPWData := dbGetDataBySID(delSID)
 
 			if !doesSidExist(foundPWData) || delSID == 0 {
 				fmt.Println("Ther is no SID", delSID)
-				getStrInput("\n\nPress enter to continue...")
+				pressEnter()
 				delMenu()
 			}
 
@@ -83,7 +86,7 @@ func delMenu() {
 			case "n":
 				delMenu()
 			}
-			getStrInput("\n\nPress enter to continue...")
+			pressEnter()
 		case "2":
 
 		case "3":
@@ -96,7 +99,8 @@ func editMenu(data PWData) {
 
 	clearTerminal()
 
-	fmt.Println("Waht do you want to edit?\n")
+	fmt.Println("Waht do you want to edit?")
+	fmt.Println("")
 	strNum := strconv.Itoa(data.SID)
 
 	fmt.Println("SID:", strNum)
@@ -104,9 +108,9 @@ func editMenu(data PWData) {
 	fmt.Println("2 - Password:", "***********")
 	fmt.Println("3 - URL:", data.URL)
 	fmt.Println("4 - Note:", data.Note)
-	fmt.Println("\n")
+	fmt.Println("")
 
-	menuCode := getIntInput("Select 1-4")
+	menuCode, _ := getIntInput("Select 1-4")
 	var newUser, newPW, newURL, newNote string
 
 	switch menuCode {
@@ -138,7 +142,7 @@ func editMenu(data PWData) {
 
 		} else {
 			fmt.Println("Wrong Password!")
-			getStrInput("\n\nPress enter to continue...")
+			pressEnter()
 			editMenu(data)
 		}
 
@@ -157,7 +161,7 @@ func editMenu(data PWData) {
 		SID: data.SID, Username: newUser, Password: newPW, URL: newURL, Note: newNote,
 	}
 	dbReplaceData(replaceData)
-	getStrInput("\n\nPress enter to continue...")
+	pressEnter()
 }
 
 func opt0() {
@@ -165,12 +169,12 @@ func opt0() {
 	clearTerminal()
 	//Get SID
 	fmt.Println("Enter the SID")
-	searchSID := getIntInput("SID")
+	searchSID, _ := getIntInput("SID")
 	foundPWData := dbGetDataBySID(searchSID)
 
 	if !doesSidExist(foundPWData) || searchSID == 0 {
 		fmt.Println("Ther is no SID", searchSID)
-		getStrInput("\n\nPress enter to continue...")
+		pressEnter()
 		mainMenu()
 	}
 
@@ -193,14 +197,14 @@ func opt0() {
 
 		} else {
 			fmt.Println("Wrong Password!")
-			getStrInput("\n\nPress enter to continue...")
+			pressEnter()
 			mainMenu()
 		}
 
 	case "n":
 		mainMenu()
 	}
-	getStrInput("\n\nPress enter to continue...")
+	pressEnter()
 }
 
 func opt1() {
@@ -208,7 +212,7 @@ func opt1() {
 	dbData = dbData[1:]
 	printTable(dbData)
 	//dbGetALLData()
-	getStrInput("\n\nPress enter to continue...")
+	pressEnter()
 }
 
 func opt2() {
@@ -221,7 +225,7 @@ func opt2() {
 		clearTerminal()
 	}
 	printTable(dbGetSearch(search))
-	getStrInput("\n\nPress enter to continue...")
+	pressEnter()
 }
 
 func opt3() {
@@ -232,20 +236,28 @@ func opt3() {
 	newURL = getStrInput("URL")
 	newNote = getStrInput("NOTE")
 	newSID := generateNewSID()
+	fmt.Println("")
 
-	for {
-		pw, check := checkPwWithHash()
-		if check {
-			key := deriveKey(pw)
-			newPW, _ = encrypt([]byte(newPW), key)
-			break
+	decision := getDecision("Do you want to save this password (y/n)")
+
+	switch decision {
+	case "y":
+		for {
+			pw, check := checkPwWithHash()
+			if check {
+				key := deriveKey(pw)
+				newPW, _ = encrypt([]byte(newPW), key)
+				break
+			}
 		}
-	}
-	newData := []PWData{
-		{SID: newSID, Username: newUser, Password: newPW, URL: newURL, Note: newNote},
-	}
 
-	dbAppend(newData)
+		newData := []PWData{
+			{SID: newSID, Username: newUser, Password: newPW, URL: newURL, Note: newNote},
+		}
+		dbAppend(newData)
+	case "n":
+		mainMenu()
+	}
 
 }
 
@@ -253,13 +265,18 @@ func opt4() {
 	clearTerminal()
 	//Get SID to del
 	fmt.Println("Enter the SID to edit")
-	delSID := getIntInput("SID")
+	delSID, NoInput := getIntInput("SID")
+
+	if NoInput == "NoInput" {
+		mainMenu()
+	}
+
 	foundPWData := dbGetDataBySID(delSID)
 
 	if !doesSidExist(foundPWData) || delSID == 0 {
 		fmt.Println("Ther is no SID", delSID)
-		getStrInput("\n\nPress enter to continue...")
-		delMenu()
+		pressEnter()
+		mainMenu()
 	}
 
 	//Print found entry
@@ -271,7 +288,7 @@ func opt4() {
 	case "y":
 		editMenu(foundPWData)
 	case "n":
-		opt4()
+		mainMenu()
 	}
 
 }

@@ -69,6 +69,7 @@ func dbDelete(delID int) {
 	fmt.Println("The data has been successfully deleted.")
 }
 
+//lint:ignore U1000 Ignore unused function temporarily for debugging
 func dbGetALLData() {
 	//get DB
 	pwDataList := dbRead()
@@ -114,6 +115,7 @@ func dbGetSearch(search string) []PWData {
 	return returnPWData
 }
 
+//lint:ignore U1000 Ignore unused function temporarily for debugging
 func dbGetSearchReturn(search string) PWData {
 	//get DB
 	pwDataList := dbRead()
@@ -130,6 +132,7 @@ func dbGetSearchReturn(search string) PWData {
 	return PWData{}
 }
 
+//lint:ignore U1000 Ignore unused function temporarily for debugging
 func dbAddPassword(searchSID int) PWData {
 	//get DB
 	pwDataList := dbRead()

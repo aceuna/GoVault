@@ -1,12 +1,10 @@
 package main
 
 import (
-	"fmt"
 	"os"
 )
 
 func main() {
-
 	login()
 	for {
 		mainMenu()
@@ -21,6 +19,7 @@ func fileExists(filename string) bool {
 	return !os.IsNotExist(err)
 }
 
+/*
 func cryptostuff() {
 
 	des := getStrInput("en=1,de=2,md5=3")
@@ -55,3 +54,4 @@ func cryptostuff() {
 
 	}
 }
+*/

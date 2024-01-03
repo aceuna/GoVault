@@ -24,11 +24,12 @@ func clearTerminal() {
 	printLogo()
 }
 
-func isNumeric(s string) bool {
-	_, err := strconv.ParseFloat(s, 64)
-	return err == nil
-}
-
+/*
+	func isNumeric(s string) bool {
+		_, err := strconv.ParseFloat(s, 64)
+		return err == nil
+	}
+*/
 func isInteger(s string) bool {
 	_, err := strconv.Atoi(s)
 	return err == nil
@@ -41,55 +42,15 @@ func generateNewSID() int {
 	return pwDataList[len(pwDataList)-1].SID + 1
 }
 
-func printLogo() {
-
-	fmt.Println(`
-    ______             __     __                     __    __     
-   /      \           /  |   /  |                   /  |  /  |    
-  /$$$$$$  |  ______  $$ |   $$ | ______   __    __ $$ | _$$ |_   
-  $$ | _$$/  /      \ $$ |   $$ |/      \ /  |  /  |$$ |/ $$   |  
-  $$ |/    |/$$$$$$  |$$  \ /$$/ $$$$$$  |$$ |  $$ |$$ |$$$$$$/   
-  $$ |$$$$ |$$ |  $$ | $$  /$$/  /    $$ |$$ |  $$ |$$ |  $$ | __ 
-  $$ \__$$ |$$ \__$$ |  $$ $$/  /$$$$$$$ |$$ \__$$ |$$ |  $$ |/  |
-  $$    $$/ $$    $$/    $$$/   $$    $$ |$$    $$/ $$ |  $$  $$/ 
-   $$$$$$/   $$$$$$/      $/     $$$$$$$/  $$$$$$/  $$/    $$$$/  
-					   `)
-	fmt.Printf("                        %s\n\n", "https://GoVault.ch")
-
-}
-
-func loading() {
-
-	fmt.Println(`
-                 _                _        
-                | |              (_)       
-                | |  ___    __ _  _  _ __  
-                | | / _ \  / _\ || || \_ \ 
-                | || (_) || (_| || || | | |
-                |_| \___/  \__/ ||_||_| |_|
-                            __/ |          
-                           |___/           												
-					   `)
-
-}
-
 func doesSidExist(searchSID PWData) bool {
-
 	var noData PWData
+	return noData != searchSID
 
-	if noData != searchSID {
-
-		return true
-
-	}
-
-	return false
 }
 
 func checkPwWithHash() (string, bool) {
-	var pw string
 
-	pw = getStrInput("Enter your PW")
+	pw := getStrInput("Enter your PW")
 
 	if createMD5Hash(pw) == dbGetDataBySID(0).Password {
 		return pw, true

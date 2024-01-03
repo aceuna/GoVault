@@ -24,7 +24,7 @@ func getStrInput(inputMessage string) string {
 }
 
 // Get Int Input
-func getIntInput(inputMessage string) int {
+func getIntInput(inputMessage string) (int, string) {
 
 	for {
 
@@ -36,8 +36,11 @@ func getIntInput(inputMessage string) int {
 		if err != nil {
 			log.Fatal()
 		}
-
 		userInput = strings.TrimSpace(userInput)
+		//filter no Input
+		if userInput == "" {
+			return 0, "NoInput"
+		}
 
 		if isInteger(userInput) {
 			intInput, err := strconv.Atoi(userInput)
@@ -46,7 +49,7 @@ func getIntInput(inputMessage string) int {
 				log.Fatal()
 			}
 
-			return intInput
+			return intInput, ""
 		}
 
 	}
@@ -69,7 +72,8 @@ func formatPWDataWithPW(data PWData, pw string) {
 	fmt.Println("Password:", pw)
 	fmt.Println("URL:", data.URL)
 	fmt.Println("Note:", data.Note)
-	fmt.Println("\n")
+	fmt.Println("")
+	fmt.Println("")
 
 }
 
@@ -87,7 +91,7 @@ func getDecision(question string) string {
 
 func printTable(PWData []PWData) {
 	// Print table header
-	fmt.Printf("%-5s %-30s %-40s %-15s\n", "SID", "Username", "URL", "Note")
+	fmt.Printf("%-5s %-30s %-40s %-15s\n", "SID", "USERNAME", "URL", "NOTE")
 	// Print table rows
 	for _, row := range PWData {
 		fmt.Printf("%-5v %-30v %-40v %-15s\n", row.SID, row.Username, row.URL, row.Note)
@@ -96,4 +100,36 @@ func printTable(PWData []PWData) {
 
 func pressEnter() {
 	getStrInput("\n\nPress enter to continue...")
+}
+
+func printLogo() {
+
+	fmt.Println(`
+    ______             __     __                     __    __     
+   /      \           /  |   /  |                   /  |  /  |    
+  /$$$$$$  |  ______  $$ |   $$ | ______   __    __ $$ | _$$ |_   
+  $$ | _$$/  /      \ $$ |   $$ |/      \ /  |  /  |$$ |/ $$   |  
+  $$ |/    |/$$$$$$  |$$  \ /$$/ $$$$$$  |$$ |  $$ |$$ |$$$$$$/   
+  $$ |$$$$ |$$ |  $$ | $$  /$$/  /    $$ |$$ |  $$ |$$ |  $$ | __ 
+  $$ \__$$ |$$ \__$$ |  $$ $$/  /$$$$$$$ |$$ \__$$ |$$ |  $$ |/  |
+  $$    $$/ $$    $$/    $$$/   $$    $$ |$$    $$/ $$ |  $$  $$/ 
+   $$$$$$/   $$$$$$/      $/     $$$$$$$/  $$$$$$/  $$/    $$$$/  
+					   `)
+	fmt.Printf("                        %s\n\n", "https://GoVault.ch")
+
+}
+
+func loading() {
+
+	fmt.Println(`
+                 _                _        
+                | |              (_)       
+                | |  ___    __ _  _  _ __  
+                | | / _ \  / _\ || || \_ \ 
+                | || (_) || (_| || || | | |
+                |_| \___/  \__/ ||_||_| |_|
+                            __/ |          
+                           |___/           												
+					   `)
+
 }

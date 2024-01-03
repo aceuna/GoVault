@@ -31,6 +31,7 @@ func login() {
 		return
 	}
 	fmt.Println("Welcome to GoVault! by Steven™")
+	fmt.Println()
 	for {
 
 		loginUser := getStrInput("User")
@@ -48,6 +49,7 @@ func login() {
 	}
 	clearTerminal()
 	//fmt.Println("Welcome to your GoVault " + dbGetDataBySID(0).Username + "!")
+	fmt.Println("Welcome to your GoVault " + dbGetDataBySID(0).Username + " !\n")
 	loading()
 	time.Sleep(1500 * time.Millisecond)
 }
