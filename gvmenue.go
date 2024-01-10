@@ -76,7 +76,7 @@ func delMenu() {
 			//Print found entry
 			clearTerminal(true)
 			formatPwData(foundPWData, "")
-			decision := newDecision("Do you want to delete this password? (y/n)")
+			decision := newDecision("Do you want to delete this password?")
 			switch decision {
 			case "y":
 				dbDelete(delSID)
@@ -84,7 +84,7 @@ func delMenu() {
 			case "n":
 				delMenu()
 			}
-			pressEnterToContinue()
+			printEventMessage("You have successfully deleted this password!")
 		case "2":
 
 		case "3":
@@ -97,20 +97,18 @@ func editMenu(data PWData) {
 
 	clearTerminal(true)
 
-	fmt.Println("Waht do you want to edit?")
-	fmt.Println("")
-	strNum := strconv.Itoa(data.SID)
-
-	fmt.Println("SID:", strNum)
+	fmt.Println("What do you want to edit?")
+	fmt.Println()
+	fmt.Println("SID:", strconv.Itoa(data.SID))
 	fmt.Println("1 - Username:", data.Username)
-	fmt.Println("2 - Password:", "***********")
+	fmt.Println("2 - Password:", "************")
 	fmt.Println("3 - URL:", data.URL)
 	fmt.Println("4 - Note:", data.Note)
-	fmt.Println("")
+	fmt.Println()
 
 	menuCode, _ := getIntInput("Select 1-4")
 	var newUser, newPW, newURL, newNote string
-
+	fmt.Println()
 	switch menuCode {
 	case 1:
 		newUser = getStrInput("New Username")
@@ -128,8 +126,8 @@ func editMenu(data PWData) {
 			pw := ""
 			//get right PW
 			for {
-				pw = getStrInput("Password")
-				pw2 := getStrInput("Repeat password")
+				pw = getStrInput("New password")
+				pw2 := getStrInput("Repeat new password")
 				if pw == pw2 {
 					break
 				}
@@ -159,7 +157,7 @@ func editMenu(data PWData) {
 		SID: data.SID, Username: newUser, Password: newPW, URL: newURL, Note: newNote,
 	}
 	dbReplaceData(replaceData)
-	pressEnterToContinue()
+	printEventMessage("You have successfully edited this password!")
 }
 
 func opt0() {
@@ -179,7 +177,8 @@ func opt0() {
 	//Print found entry
 	clearTerminal(true)
 	formatPwData(foundPWData, "")
-	decision := newDecision("Do you want to see this password? (y/n)")
+	decision := newDecision("Do you want to see this password?")
+	fmt.Println()
 	switch decision {
 	case "y":
 		pw, check := checkPwWithHash()
@@ -208,6 +207,8 @@ func opt0() {
 func opt1() {
 	dbData := dbRead()
 	dbData = dbData[1:]
+	fmt.Println("These are your passwords")
+	fmt.Println()
 	formatTable(dbData)
 	//dbGetALLData()
 	pressEnterToContinue()
@@ -236,7 +237,7 @@ func opt3() {
 	newSID := generateNewSID()
 	fmt.Println("")
 
-	decision := newDecision("Do you want to save this password (y/n)")
+	decision := newDecision("Do you want to save this password")
 
 	switch decision {
 	case "y":
@@ -281,7 +282,7 @@ func opt4() {
 	clearTerminal(true)
 	formatPwData(foundPWData, "")
 
-	decision := newDecision("Do you want to edit this password? (y/n)")
+	decision := newDecision("Do you want to edit this password?")
 	switch decision {
 	case "y":
 		editMenu(foundPWData)

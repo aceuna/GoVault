@@ -52,9 +52,8 @@ func formatPwData(data PWData, pw string) {
 	if pw == "" {
 		pw = "************"
 	}
-	strNum := strconv.Itoa(data.SID)
 
-	fmt.Println("SID:", strNum)
+	fmt.Println("SID:", strconv.Itoa(data.SID))
 	fmt.Println("Username:", data.Username)
 	fmt.Println("Password:", pw)
 	fmt.Println("URL:", data.URL)
@@ -65,7 +64,7 @@ func formatPwData(data PWData, pw string) {
 func newDecision(question string) string {
 	var decision string
 	for {
-		decision = getStrInput(question)
+		decision = getStrInput(question + " (y/n)")
 		decision = strings.ToLower(decision)
 		if decision == "y" || decision == "n" {
 			break
@@ -76,10 +75,32 @@ func newDecision(question string) string {
 
 func formatTable(PWData []PWData) {
 	// Print table header
-	fmt.Printf("%-5s %-30s %-40s %-15s\n", "SID", "USERNAME", "URL", "NOTE")
+	fmt.Printf("%-5s %-25s %-35s %-40s\n", "SID", "USERNAME", "URL", "NOTE")
 	// Print table rows
 	for _, row := range PWData {
-		fmt.Printf("%-5v %-30v %-40v %-15s\n", row.SID, row.Username, row.URL, row.Note)
+
+		var printUsername, printURL, printNote string
+
+		if len(row.Username) >= 24 {
+			printUsername = row.Username[:20]
+			printUsername += "... "
+		} else {
+			printUsername = row.Username
+		}
+		if len(row.URL) >= 34 {
+			printURL = row.URL[:30]
+			printURL += "... "
+		} else {
+			printURL = row.URL
+		}
+		if len(row.Note) >= 40 {
+			printNote = row.Note[:36]
+			printNote += "... "
+		} else {
+			printNote = row.Note
+		}
+
+		fmt.Printf("%-5v %-25v %-35v %-40s\n", row.SID, printUsername, printURL, printNote)
 	}
 }
 
@@ -121,4 +142,10 @@ func printLogin() {
 
 func printWelcome() {
 	fmt.Println("Welcome to your GoVault " + dbGetDataBySID(0).Username + " !\n")
+}
+
+func printEventMessage(message string) {
+	clearTerminal(true)
+	fmt.Println(message)
+	pressEnterToContinue()
 }

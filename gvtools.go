@@ -52,7 +52,7 @@ func doesSidExist(searchSID PWData) bool {
 
 func checkPwWithHash() (string, bool) {
 
-	pw := getStrInput("Enter your PW")
+	pw := getStrInput("Enter your GoVault password")
 
 	if createMD5Hash(pw) == dbGetDataBySID(0).Password {
 		return pw, true
