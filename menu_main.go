@@ -25,28 +25,28 @@ func mainMenu() {
 
 		switch menuCode {
 		case "0":
-			opt0()
+			mainOpt0()
 		case "1":
-			opt1()
+			mainOpt1()
 		case "2":
-			opt2()
+			mainOpt2()
 		case "3":
-			opt3()
+			mainOpt3()
 		case "4":
-			opt4()
+			mainOpt4()
 		case "5":
-			opt5()
+			mainOpt5()
 		case "6":
-			opt6()
+			mainOpt6()
 		case "7":
-			opt7()
+			mainOpt7()
 		}
 
 	}
 
 }
 
-func opt0() {
+func mainOpt0() {
 
 	clearTerminal(true)
 	//Get SID
@@ -57,7 +57,7 @@ func opt0() {
 	if !doesSidExist(foundPWData) || searchSID == 0 {
 		fmt.Println("Ther is no SID", searchSID)
 		pressEnterToContinue()
-		mainMenu()
+		return
 	}
 
 	//Print found entry
@@ -81,13 +81,12 @@ func opt0() {
 			pressEnterToContinue()
 			mainMenu()
 		}
-	} else {
-		mainMenu()
+		pressEnterToContinue()
 	}
-	pressEnterToContinue()
+
 }
 
-func opt1() {
+func mainOpt1() {
 	dbData := dbRead()
 	dbData = dbData[1:]
 	fmt.Println("These are your passwords")
@@ -97,7 +96,7 @@ func opt1() {
 	pressEnterToContinue()
 }
 
-func opt2() {
+func mainOpt2() {
 	search := ""
 	for {
 		search = getStrInput("Search")
@@ -110,7 +109,7 @@ func opt2() {
 	pressEnterToContinue()
 }
 
-func opt3() {
+func mainOpt3() {
 	fmt.Println("Add a new PW")
 	newUser, newPW, newURL, newNote := "", "", "", ""
 	newUser = getStrInput("Username")
@@ -134,20 +133,19 @@ func opt3() {
 			{SID: newSID, Username: newUser, Password: newPW, URL: newURL, Note: newNote},
 		}
 		dbAddData(newData)
-	} else {
-		mainMenu()
+		printEventMessage("Your password has been saved!")
 	}
 
 }
 
-func opt4() {
+func mainOpt4() {
 	clearTerminal(true)
 	//Get SID to del
 	fmt.Println("Enter the SID to edit")
 	delSID, NoInput := getIntInput("SID")
 
 	if NoInput == "NoInput" {
-		mainMenu()
+		return
 	}
 
 	foundPWData := dbGetDataBySID(delSID)
@@ -155,7 +153,7 @@ func opt4() {
 	if !doesSidExist(foundPWData) || delSID == 0 {
 		fmt.Println("Ther is no SID", delSID)
 		pressEnterToContinue()
-		mainMenu()
+		return
 	}
 
 	//Print found entry
@@ -164,19 +162,16 @@ func opt4() {
 
 	if getDecision("Do you want to edit this password?") {
 		editMenu(foundPWData)
-	} else {
-		mainMenu()
 	}
-
 }
 
-func opt5() {
+func mainOpt5() {
 	delMenu()
 }
 
-func opt6() {
+func mainOpt6() {
 	login()
 }
-func opt7() {
+func mainOpt7() {
 	exit()
 }

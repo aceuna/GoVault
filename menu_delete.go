@@ -42,6 +42,7 @@ func delMenu() {
 				delMenu()
 			}
 			printEventMessage("You have successfully deleted this password!")
+			mainMenu()
 		case "2":
 			search := ""
 			for {
@@ -56,7 +57,6 @@ func delMenu() {
 			if len(delData) == 0 {
 				clearTerminal(true)
 				printEventMessage("No passwords found for this search!")
-				pressEnterToContinue()
 				delMenu()
 			}
 			clearTerminal(true)
