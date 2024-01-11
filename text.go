@@ -62,9 +62,8 @@ func formatPwData(data PWData, pw string) {
 }
 
 func getDecision(question string) bool {
-	var decision string
 	for {
-		decision = getStrInput(question + " (y/n)")
+		decision := getStrInput(question + " (y/n)")
 		decision = strings.ToLower(decision)
 		if decision == "y" {
 			return true
