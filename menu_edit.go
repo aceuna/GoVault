@@ -5,6 +5,13 @@ import (
 	"strconv"
 )
 
+var (
+	newUser string
+	newPW   string
+	newURL  string
+	newNote string
+)
+
 func editMenu(data PWData) {
 
 	clearTerminal(true)
@@ -18,10 +25,10 @@ func editMenu(data PWData) {
 	fmt.Println("4 - Note:", data.Note)
 	fmt.Println()
 
-	menuCode, _ := getIntInput("Select 1-4")
-	var newUser, newPW, newURL, newNote string
+	editCode, _ := getIntInput("Select 1-4")
 	fmt.Println()
-	switch menuCode {
+
+	switch editCode {
 	case 1:
 		newUser = getStrInput("New Username")
 		newPW = data.Password
@@ -33,10 +40,9 @@ func editMenu(data PWData) {
 		newNote = data.Note
 
 		keyPw, check := checkPwWithHash()
-
 		if check {
 			pw := ""
-			//get right PW
+
 			for {
 				pw = getStrInput("New password")
 				pw2 := getStrInput("Repeat new password")
