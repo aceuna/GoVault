@@ -35,8 +35,7 @@ func dbAddData(newData []PWData) {
 	existingList := dbRead()
 	// Append the new data to the existing list
 	existingList = append(existingList, newData...)
-	updatedData, _ := json.MarshalIndent(existingList, "", "  ")
-	os.WriteFile(jsonFilePath, updatedData, 0644)
+	dbSave(existingList)
 }
 
 func dbDelete(delSID int) {
@@ -59,8 +58,7 @@ func dbDelete(delSID int) {
 		fmt.Println("No data to delete!")
 		return
 	}
-	updatedData, _ := json.MarshalIndent(newPwDataList, "", "  ")
-	os.WriteFile(jsonFilePath, updatedData, 0644)
+	dbSave(newPwDataList)
 
 	//fmt.Println("The data has been successfully deleted.")
 }
@@ -107,7 +105,11 @@ func dbReplaceData(data PWData) {
 			newpwDataList = append(newpwDataList, pwData)
 		}
 	}
+	dbSave(newpwDataList)
+}
 
+// save database
+func dbSave(newpwDataList []PWData) {
 	updatedData, _ := json.MarshalIndent(newpwDataList, "", "  ")
 	os.WriteFile(jsonFilePath, updatedData, 0644)
 }

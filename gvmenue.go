@@ -76,17 +76,49 @@ func delMenu() {
 			//Print found entry
 			clearTerminal(true)
 			formatPwData(foundPWData, "")
-			decision := newDecision("Do you want to delete this password?")
-			switch decision {
-			case "y":
+
+			if getDecision("Do you want to delete this password?") {
 				dbDelete(delSID)
 				//fmt.Println("The password has been deleted!")
-			case "n":
+			} else {
 				delMenu()
 			}
 			printEventMessage("You have successfully deleted this password!")
 		case "2":
+			search := ""
+			for {
+				search = getStrInput("Search for passwords to delete")
+				if strings.TrimSpace(search) != "" {
+					break
+				}
+				clearTerminal(true)
+			}
+			delData := dbGetDataBySearch(search)
 
+			if len(delData) == 0 {
+				clearTerminal(true)
+				printEventMessage("No passwords found for this search!")
+				pressEnterToContinue()
+				delMenu()
+			}
+			clearTerminal(true)
+			formatTable(delData)
+			fmt.Println()
+
+			if getDecision("Would you like to delete all these passwords?") {
+
+				for _, delPW := range delData {
+					dbDelete(delPW.SID)
+				}
+
+				printEventMessage("All passwords have been deleted!")
+
+			} else {
+				delMenu()
+			}
+
+			pressEnterToContinue()
+			mainMenu()
 		case "3":
 			mainMenu()
 		}
@@ -177,10 +209,8 @@ func opt0() {
 	//Print found entry
 	clearTerminal(true)
 	formatPwData(foundPWData, "")
-	decision := newDecision("Do you want to see this password?")
-	fmt.Println()
-	switch decision {
-	case "y":
+
+	if getDecision("Do you want to see this password?") {
 		pw, check := checkPwWithHash()
 
 		if check {
@@ -197,8 +227,7 @@ func opt0() {
 			pressEnterToContinue()
 			mainMenu()
 		}
-
-	case "n":
+	} else {
 		mainMenu()
 	}
 	pressEnterToContinue()
@@ -237,10 +266,7 @@ func opt3() {
 	newSID := generateNewSID()
 	fmt.Println("")
 
-	decision := newDecision("Do you want to save this password")
-
-	switch decision {
-	case "y":
+	if getDecision("Do you want to save this password") {
 		for {
 			pw, check := checkPwWithHash()
 			if check {
@@ -254,7 +280,7 @@ func opt3() {
 			{SID: newSID, Username: newUser, Password: newPW, URL: newURL, Note: newNote},
 		}
 		dbAddData(newData)
-	case "n":
+	} else {
 		mainMenu()
 	}
 
@@ -282,11 +308,9 @@ func opt4() {
 	clearTerminal(true)
 	formatPwData(foundPWData, "")
 
-	decision := newDecision("Do you want to edit this password?")
-	switch decision {
-	case "y":
+	if getDecision("Do you want to edit this password?") {
 		editMenu(foundPWData)
-	case "n":
+	} else {
 		mainMenu()
 	}
 

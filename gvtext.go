@@ -61,16 +61,17 @@ func formatPwData(data PWData, pw string) {
 	fmt.Println()
 }
 
-func newDecision(question string) string {
+func getDecision(question string) bool {
 	var decision string
 	for {
 		decision = getStrInput(question + " (y/n)")
 		decision = strings.ToLower(decision)
-		if decision == "y" || decision == "n" {
-			break
+		if decision == "y" {
+			return true
+		} else if decision == "n" {
+			return false
 		}
 	}
-	return decision
 }
 
 func formatTable(PWData []PWData) {
