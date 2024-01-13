@@ -1,9 +1,9 @@
 package main
 
 func main() {
-	//Force user login
-	login()
-	//Start Menu
+	// menu for user to login or register
+	loginMenu()
+	// start main menu
 	for {
 		mainMenu()
 	}

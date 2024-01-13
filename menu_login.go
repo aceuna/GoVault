@@ -6,13 +6,13 @@ import (
 	"time"
 )
 
-func login() {
+func loginMenu() {
 	clearTerminal(true)
 
 	//create login if none exists
 	if !fileExists(jsonFilePath) {
 		creatLogin(0)
-		login()
+		loginMenu()
 		return
 	}
 	//normal login
@@ -28,7 +28,7 @@ func login() {
 		} else {
 			fmt.Println("You have entered the wrong user or password!!")
 			pressEnterToContinue()
-			login()
+			loginMenu()
 			return
 		}
 

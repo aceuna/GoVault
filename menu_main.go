@@ -170,7 +170,7 @@ func mainOpt5() {
 }
 
 func mainOpt6() {
-	login()
+	loginMenu()
 }
 func mainOpt7() {
 	exit()
