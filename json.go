@@ -39,8 +39,8 @@ func dbAddData(newData []PWData) {
 }
 
 func dbDelete(delSID int) {
-	//Del admin protection
-	if delSID == 0 {
+	//prevent deletion of the admin account (SID 0)
+	if delSID <= 0 {
 		return
 	}
 	//get DB
@@ -48,25 +48,23 @@ func dbDelete(delSID int) {
 	//get all exept delID
 	var newPwDataList []PWData
 	for _, pwData := range pwDataList {
-
 		if delSID != pwData.SID {
 			newPwDataList = append(newPwDataList, pwData)
 		}
 	}
-	//Write new DB
+	//check if there is something to delete
 	if len(pwDataList) == len(newPwDataList) {
 		fmt.Println("No data to delete!")
 		return
 	}
+	//save new data
 	dbSave(newPwDataList)
-
-	//fmt.Println("The data has been successfully deleted.")
 }
 
 func dbGetDataBySID(searchSID int) PWData {
 	//get DB
 	pwDataList := dbRead()
-	//get all exept delID
+	//search for SID
 	for _, pwData := range pwDataList {
 		if searchSID == pwData.SID {
 			return pwData
@@ -109,7 +107,7 @@ func dbReplaceData(data PWData) {
 }
 
 // save database
-func dbSave(newpwDataList []PWData) {
-	updatedData, _ := json.MarshalIndent(newpwDataList, "", "  ")
+func dbSave(newPwDataList []PWData) {
+	updatedData, _ := json.MarshalIndent(newPwDataList, "", "  ")
 	os.WriteFile(jsonFilePath, updatedData, 0644)
 }

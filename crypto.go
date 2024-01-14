@@ -22,9 +22,9 @@ func createMD5Hash(data string) string {
 	hash := md5.Sum(byte)
 
 	// Convert the hash to a hex string
-	hashStr := hex.EncodeToString(hash[:])
+	newHash := hex.EncodeToString(hash[:])
 
-	return hashStr
+	return newHash
 }
 
 func deriveKey(password string) []byte {

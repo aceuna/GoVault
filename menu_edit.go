@@ -19,6 +19,7 @@ func editMenu(data PWData) {
 	fmt.Println("What do you want to edit?")
 	fmt.Println()
 	fmt.Println("SID:", strconv.Itoa(data.SID))
+	fmt.Println()
 	fmt.Println("1 - Username:", data.Username)
 	fmt.Println("2 - Password:", "************")
 	fmt.Println("3 - URL:", data.URL)
@@ -41,16 +42,13 @@ func editMenu(data PWData) {
 
 		keyPw, check := checkPwWithHash()
 		if check {
-			pw := ""
-
+			var pw string
 			for {
 				pw = getStrInput("New password")
-				pw2 := getStrInput("Repeat new password")
-				if pw == pw2 {
+				if pw == getStrInput("Repeat new password") {
 					break
 				}
 			}
-
 			key := deriveKey(keyPw)
 			newPW, _ = encrypt([]byte(pw), key)
 
@@ -59,7 +57,6 @@ func editMenu(data PWData) {
 			pressEnterToContinue()
 			editMenu(data)
 		}
-
 	case 3:
 		newUser = data.Username
 		newPW = data.Password
@@ -71,9 +68,15 @@ func editMenu(data PWData) {
 		newURL = data.URL
 		newNote = getStrInput("New Note")
 	}
+
 	replaceData := PWData{
-		SID: data.SID, Username: newUser, Password: newPW, URL: newURL, Note: newNote,
+		SID:      data.SID,
+		Username: newUser,
+		Password: newPW,
+		URL:      newURL,
+		Note:     newNote,
 	}
+
 	dbReplaceData(replaceData)
 	printEventMessage("You have successfully edited this password!")
 }

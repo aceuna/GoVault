@@ -40,17 +40,22 @@ func loginMenu() {
 func creatLogin(SID int) {
 	fmt.Println("Welcome to GoVault. Create your user!")
 	user := getStrInput("User")
-	pw := ""
+	var pw string
 	//get right PW
 	for {
 		pw = getStrInput("Password")
-		pw2 := getStrInput("Repeat password")
-		if pw == pw2 {
+		if pw == getStrInput("Repeat password") {
 			break
 		}
 	}
 	newUser := []PWData{
-		{SID: SID, Username: user, Password: createMD5Hash(pw), URL: "https://govault.ch/", Note: "System PW"},
+		{
+			SID:      SID,
+			Username: user,
+			Password: createMD5Hash(pw),
+			URL:      "https://govault.ch/",
+			Note:     "System PW",
+		},
 	}
 	dbAddData(newUser)
 }

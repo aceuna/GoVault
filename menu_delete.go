@@ -9,7 +9,7 @@ func delMenu() {
 	for {
 		clearTerminal(true)
 		fmt.Println("GoVault delete menu")
-		fmt.Println("")
+		fmt.Println()
 		fmt.Println("1 - Delet by SID")
 		fmt.Println("2 - Delet by Search")
 		fmt.Println("3 - Return")
