@@ -38,7 +38,7 @@ func delOpt1() {
 	foundPWData := dbGetDataBySID(delSID)
 
 	if !doesSidExist(foundPWData) || delSID == 0 {
-		fmt.Println("Ther is no SID", delSID)
+		fmt.Println("There is no SID", delSID)
 		pressEnterToContinue()
 		return
 	}

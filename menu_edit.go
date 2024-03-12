@@ -67,6 +67,9 @@ func editMenu(data PWData) {
 		newPW = data.Password
 		newURL = data.URL
 		newNote = getStrInput("New Note")
+	default:
+		editMenu(data)
+		return
 	}
 
 	replaceData := PWData{

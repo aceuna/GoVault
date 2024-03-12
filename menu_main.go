@@ -55,7 +55,7 @@ func mainOpt0() {
 	foundPWData := dbGetDataBySID(searchSID)
 
 	if !doesSidExist(foundPWData) || searchSID == 0 {
-		fmt.Println("Ther is no SID", searchSID)
+		fmt.Println("There is no SID", searchSID)
 		pressEnterToContinue()
 		return
 	}
@@ -151,7 +151,7 @@ func mainOpt4() {
 	foundPWData := dbGetDataBySID(delSID)
 
 	if !doesSidExist(foundPWData) || delSID == 0 {
-		fmt.Println("Ther is no SID", delSID)
+		fmt.Println("There is no SID", delSID)
 		pressEnterToContinue()
 		return
 	}
