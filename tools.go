@@ -26,12 +26,6 @@ func clearTerminal(logo bool) {
 	}
 }
 
-/*
-	func isNumeric(s string) bool {
-		_, err := strconv.ParseFloat(s, 64)
-		return err == nil
-	}
-*/
 func isInteger(s string) bool {
 	_, err := strconv.Atoi(s)
 	return err == nil
